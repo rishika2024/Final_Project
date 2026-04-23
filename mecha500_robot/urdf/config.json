@@ -1,0 +1,48 @@
+{
+    "url": "https://cad.onshape.com/documents/3f7808e3432022d5b08177ae/w/13f89a95a237b65f6f12ec68/e/351cb02b91d61e28501e44e7",
+    "output_format": "urdf",
+    "robot_name": "meca500",
+    "package_name": "meca500_description",
+    "assets_directory": "meshes",
+
+    "ignore_limits": true,
+
+    "joint_properties": {
+        "*": {
+            "friction": 0.0
+        },
+        "joint1": {
+            "max_effort": 16.6,
+            "max_velocity": 3.9270,
+            "limits": [-3.0543, 3.0543]
+        },
+        "joint2": {
+            "max_effort": 16.6,
+            "max_velocity": 3.9270,
+            "limits": [-1.2217, 1.5708]
+        },
+        "joint3": {
+            "max_effort": 16.6,
+            "max_velocity": 3.9270,
+            "limits": [-2.3562, 1.2217]
+        },
+        "joint4": {
+            "max_effort": 2.5,
+            "max_velocity": 6.1087,
+            "limits": [-2.9671, 2.9671]
+        },
+        "joint5": {
+            "max_effort": 2.5,
+            "max_velocity": 6.1087,
+            "limits": [-2.0071, 2.0071]
+        },
+        "joint6": {
+            "max_effort": 1.5,
+            "max_velocity": 8.7266,
+            "limits": [-628.3185, 628.3185]
+        }
+    },
+
+    "ignore": ["PS200", "Cable", "Screw", "Bolt"],
+    "no_dynamics": false
+}
