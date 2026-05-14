@@ -1,14 +1,13 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="meca500">
-    <xacro:arg name="initial_positions_file" default="initial_positions.yaml" />
 
-    <!-- Import meca500 urdf file -->
-    <xacro:include filename="$(find mecha500_robot)/urdf/robot.urdf" />
+    <!-- use_mock_hardware:=true  → mock_components/GenericSystem (default, no real robot needed) -->
+    <!-- use_mock_hardware:=false → meca500_hardware/Meca500System (real robot at robot_ip)     -->
+    <xacro:arg name="use_mock_hardware" default="true"/>
+    <xacro:arg name="robot_ip"          default="192.168.0.100"/>
+    <xacro:arg name="control_port"      default="10000"/>
+    <xacro:arg name="monitoring_port"   default="10001"/>
 
-    <!-- Import control_xacro -->
-    <xacro:include filename="meca500.ros2_control.xacro" />
-
-
-    <xacro:meca500_ros2_control name="FakeSystem" initial_positions_file="$(arg initial_positions_file)"/>
+    <xacro:include filename="$(find mecha500_robot)/urdf/robot.urdf.xacro" />
 
 </robot>

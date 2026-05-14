@@ -7,6 +7,7 @@ moveit_simple_controller_manager:
     - meca500_arm_controller
 
   meca500_arm_controller:
+    action_ns: follow_joint_trajectory
     type: FollowJointTrajectory
     joints:
       - joint1

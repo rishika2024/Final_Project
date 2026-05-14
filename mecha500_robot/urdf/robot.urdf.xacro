@@ -1,7 +1,14 @@
 <?xml version="1.0" ?>
 <!-- Generated using onshape-to-robot -->
 <!-- Onshape https://cad.onshape.com/documents/3f7808e3432022d5b08177ae/w/13f89a95a237b65f6f12ec68/e/351cb02b91d61e28501e44e7 -->
-<robot name="meca500">
+<robot name="meca500" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:arg name="use_mock_hardware" default="true"/>
+
+  <xacro:include filename="$(find mecha500_robot)/urdf/robot.ros2_control.xacro" />
+
+  <xacro:meca500_ros2_control name="meca500" prefix="" use_mock_hardware="$(arg use_mock_hardware)"/>
+
   <!-- Link link_0__base -->
   <link name="link_0__base">
     <inertial>

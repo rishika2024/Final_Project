@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="meca500_ros2_control" params="name prefix use_mock_hardware">
+
+    <xacro:arg name="robot_ip" default="192.168.0.100"/>
+    <xacro:arg name="control_port" default="10000"/>
+    <xacro:arg name="monitoring_port" default="10001"/>
+
+    <ros2_control name="${name}" type="system">
+
+      <!-- Real hardware -->
+      <xacro:unless value="${use_mock_hardware}">
+        <hardware>
+          <plugin>meca500_hardware/Meca500System</plugin>
+          <param name="robot_ip">$(arg robot_ip)</param>
+          <param name="control_port">$(arg control_port)</param>
+          <param name="monitoring_port">$(arg monitoring_port)</param>
+        </hardware>
+      </xacro:unless>
+
+      <!-- Fake hardware for testing without the robot -->
+      <xacro:if value="${use_mock_hardware}">
+        <hardware>
+          <plugin>mock_components/GenericSystem</plugin>
+          <param name="calculate_dynamics">true</param>
+        </hardware>
+      </xacro:if>
+
+      <joint name="${prefix}joint1">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+
+      <joint name="${prefix}joint2">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+
+      <joint name="${prefix}joint3">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+
+      <joint name="${prefix}joint4">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+
+      <joint name="${prefix}joint5">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+
+      <joint name="${prefix}joint6">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+
+    </ros2_control>
+
+  </xacro:macro>
+
+</robot>
