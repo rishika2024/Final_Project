@@ -18,6 +18,7 @@
 #ifndef MECA500_HARDWARE__MECA500_SYSTEM_HPP_
 #define MECA500_HARDWARE__MECA500_SYSTEM_HPP_
 
+#include <array>
 #include <string>
 #include <vector>
 
@@ -86,10 +87,9 @@ private:
   int control_fd = -1;
   int monitoring_fd = -1;
 
-  // Calibration offsets (degrees): added to Mecademic angles to get URDF angles.
-  // Derived from slider visual match [38,33,7,2] at actual home [-0.213,-0.196,-0.046,0.006].
-  // Derived from slider visual match at actual home [-0.003879,-0.213362,-0.195776,-0.046034,0.00569,-0.02069].
-  static constexpr double JOINT_OFFSET_DEG[NUM_JOINTS] = {0.0, 40.282, 34.984, -82.954, 2.023, 0.0};
+  // Calibration offsets (degrees): URDF_angle = offset - Mecademic_angle
+  // Loaded from meca500_moveit/config/joint_offsets.yaml via hardware_parameters.
+  std::array<double, NUM_JOINTS> joint_offsets_deg_{};
 
 
   // Auto-detected at runtime in on_configure()

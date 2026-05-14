@@ -4,10 +4,14 @@
 <robot name="meca500" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:arg name="use_mock_hardware" default="true"/>
+  <xacro:arg name="joint_offsets_file" default="$(find meca500_moveit)/config/joint_offsets.yaml"/>
+  <xacro:arg name="initial_positions_file" default="$(find meca500_moveit)/config/initial_positions.yaml"/>
 
   <xacro:include filename="$(find mecha500_robot)/urdf/robot.ros2_control.xacro" />
 
-  <xacro:meca500_ros2_control name="meca500" prefix="" use_mock_hardware="$(arg use_mock_hardware)"/>
+  <xacro:meca500_ros2_control name="meca500" prefix="" use_mock_hardware="$(arg use_mock_hardware)"
+    joint_offsets_file="$(arg joint_offsets_file)"
+    initial_positions_file="$(arg initial_positions_file)"/>
 
   <!-- Link link_0__base -->
   <link name="link_0__base">

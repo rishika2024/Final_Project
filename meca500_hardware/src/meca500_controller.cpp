@@ -138,6 +138,24 @@ namespace meca500_hardware
         hw_velocities_.resize(6, 0.0);
         hw_commands_.resize(6, 0.0);
 
+        // Load joint offsets from hardware parameters (set via joint_offsets.yaml)
+        const std::string keys[NUM_JOINTS] = {
+            "joint1_offset_deg", "joint2_offset_deg", "joint3_offset_deg",
+            "joint4_offset_deg", "joint5_offset_deg", "joint6_offset_deg"
+        };
+        for (size_t i = 0; i < NUM_JOINTS; ++i) {
+            auto it = info_.hardware_parameters.find(keys[i]);
+            if (it != info_.hardware_parameters.end()) {
+                joint_offsets_deg_[i] = std::stod(it->second);
+            } else {
+                joint_offsets_deg_[i] = 0.0;
+                RCLCPP_WARN(get_logger(), "%s not found in hardware params, defaulting to 0", keys[i].c_str());
+            }
+        }
+        RCLCPP_INFO(get_logger(), "Joint offsets (deg): %.3f %.3f %.3f %.3f %.3f %.3f",
+            joint_offsets_deg_[0], joint_offsets_deg_[1], joint_offsets_deg_[2],
+            joint_offsets_deg_[3], joint_offsets_deg_[4], joint_offsets_deg_[5]);
+
         return CallbackReturn::SUCCESS;
     }
 
@@ -219,7 +237,7 @@ namespace meca500_hardware
             RCLCPP_INFO(rclcpp::get_logger("Meca500System"),
               "Home response: %s", buf);
 
-            // Drain any stale messages (e.g. extra [2002] from Home) before GetJoints.
+            // Drain any stale messages before GetJoints.
             {
                 char drain[256];
                 while (recv(control_fd, drain, sizeof(drain), MSG_DONTWAIT) > 0) {}
@@ -254,7 +272,7 @@ namespace meca500_hardware
                         if (fields.size() >= start + NUM_JOINTS) {
                             for (size_t i = 0; i < NUM_JOINTS; ++i) {
                                 hw_positions_.at(i) =
-                                    (JOINT_OFFSET_DEG[i] - std::stod(fields[start + i])) * M_PI / 180.0;
+                                    (joint_offsets_deg_[i] - std::stod(fields[start + i])) * M_PI / 180.0;
                             }
                             hw_commands_ = hw_positions_;
                             RCLCPP_INFO(rclcpp::get_logger("Meca500System"),
@@ -347,7 +365,7 @@ namespace meca500_hardware
 
                         for (size_t i = 0; i < NUM_JOINTS; ++i) {
                             hw_positions_.at(i) =
-                                (JOINT_OFFSET_DEG[i] - std::stod(fields[start + i])) * M_PI / 180.0;
+                                (joint_offsets_deg_[i] - std::stod(fields[start + i])) * M_PI / 180.0;
                         }
 
                     } catch (const std::exception & e) {
@@ -384,7 +402,7 @@ namespace meca500_hardware
  
         std::vector<double> joints_deg(6, 0.0);
         for(size_t i = 0; i < hw_commands_.size(); ++i){
-            joints_deg.at(i) = JOINT_OFFSET_DEG[i] - hw_commands_.at(i) * 180.0 / M_PI;
+            joints_deg.at(i) = joint_offsets_deg_[i] - hw_commands_.at(i) * 180.0 / M_PI;
         }
         
        
